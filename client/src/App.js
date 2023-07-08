@@ -7,8 +7,9 @@ import ShopContextProvider from "./context/shop-context";
 import CartItems from "./pages/cart/CartItems";
 import Checkout from "./pages/shop/Checkout";
 import Wishlist from "./pages/cart/Wishlist";
-import Login from "./pages/admin/Login"
+import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import PrivateRoutes from "./utils/PrivateRoutes";
 
 function App() {
   return (
@@ -22,8 +23,15 @@ function App() {
             <Route path="items" element={<CartItems />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="wishlist" element={<Wishlist />} />
-            <Route path="admin/login" element={<Login />} />
-            <Route path="admin/dashboard" element={<AdminDashboard />} />
+            <Route path="admin/login" element={<AdminLogin />} />
+            {/* admin only */}
+            <Route element={<PrivateRoutes/>}>
+              <Route
+                path="admin/dashboard"
+                element={<AdminDashboard />}
+                exact
+              />
+            </Route>
           </Routes>
         </Router>
       </ShopContextProvider>

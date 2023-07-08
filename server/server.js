@@ -1,54 +1,45 @@
-const mysql = require("mysql");
 const express = require("express");
 const cors = require("cors");
+const sessions = require("express-session");
+const dotenv = require("dotenv")
+
+const Register = require("./routes/userAuth")
+const Login = require("./routes/auth");
+const Orders = require("./routes/auth")
+const CurrentOrder = require("./routes/userAuth");
 
 let app = express();
 
-let port = 3001;
+const port = 3001;
+
+dotenv.config({
+  path: "./KEY.ENV",
+});
 
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "react-ecommerce",
-});
+app.use(
+  sessions({
+    secret: process.env.SECRET_KEY,
+    saveUninitialized: false,
+    resave: false,
+  })
+);
 
-db.connect(function (err, result) {
-  if (err) throw err;
+// admin routes
+app.use("/admin", Login);
+app.use("/admin", Orders)
 
-  console.log("Successfully connected");
-});
+// user routes
+app.use("/", Register)
+app.use("/", CurrentOrder)
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
 
-app.post("/products/fetch", async (req, res) => {
-  try {
-    let query = "";
-    db.query(query, (err, result) => {
-      if (err) throw err;
 
-      res.send(result);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
 
-app.post("/create-orders", async (req, res) => {
-  let { nama, alamat, order, email, total } = req.body;
-  let query = `INSERT INTO orders (orders, email, address, total, name) VALUES (?, ?, ?, ?, ?)`;
-  try {
-    db.query(query, [order, email, alamat, total, nama], (err, result) => {
-      if (err) throw err;
 
-      res.send(result);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
+
