@@ -1,20 +1,19 @@
 import { products } from "../../Products";
 import Product from "./Product";
+import { Grid } from "@mui/material";
 
 const Shop = () => {
-
-
   return (
     <>
       <div className="shop">
-        <h1>Shop</h1>
-        <div className="products">
-          <div>
-            {products.map((product) => (
-              <Product data={product} key={product.id} />
-            ))}
-          </div>
-        </div>
+        <br />
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          {products.map((product) => (
+            <Grid item xs={6} sm={3} key={product.id}>
+              <Product data={product} />
+            </Grid>
+          ))}
+        </Grid>
       </div>
     </>
   );

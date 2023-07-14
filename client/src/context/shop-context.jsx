@@ -47,14 +47,18 @@ const ShopContextProvider = (props) => {
 
   const addItems = (id) => {
     setCartItems((prev) => ({ ...prev, [id]: prev[id] + 1 }));
+    localStorage.setItem("cart", JSON.stringify(cartItems))
   };
 
   const removeItems = (id) => {
-    setCartItems((prev) => ({ ...prev, [id]: prev[id] - 1 }));
+    if(totalCartAmount != 0){
+      setCartItems((prev) => ({ ...prev, [id]: prev[id] - 1 }));
+    }
   };
 
   const updateCartItems = (value, id) => {
     setCartItems((prev) => ({ ...prev, [id]: value }));
+    localStorage.setItem("cart", JSON.stringify(cartItems));
   };
 
   const addWishlist = (id) => {

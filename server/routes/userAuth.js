@@ -29,7 +29,7 @@ router.post("/login", (req, res) => {
   const { username, pwd } = req.body;
   const jwtKey = process.env.SECRET_KEY;
 
-  const query = "SELECT * FROM users WHERE username = ? AND password = ?";
+  const query = "SELECT * FROM users WHERE username = ? AND PASSWORD = ?";
 
   db.query(query, [username, pwd], async (error, results) => {
     if (error) {
@@ -46,12 +46,12 @@ router.post("/login", (req, res) => {
 
           if (match) {
             console.log("Logged in");
-            const accessToken = jwt.sign({ username, pwd }, jwtKey, {
+            const userToken = jwt.sign({ username, pwd }, jwtKey, {
               noTimestamp: true,
             });
             res.send({
               status: 200,
-              accessToken: accessToken,
+              userToken: userToken,
             });
           } else {
             res.status(400).send("x");
@@ -68,6 +68,7 @@ router.post("/create-orders", async (req, res) => {
   try {
     db.query(query, [order, email, alamat, total, nama, createdAt], (err, result) => {
       if (err) throw err;
+      
 
       res.send(result);
     });

@@ -5,44 +5,41 @@ import CartItems from "../cart/CartItems";
 import { products } from "../../Products";
 import axios from "axios";
 
-var today = new Date();
-var dd = String(today.getDate()).padStart(2, "0");
-var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-var yyyy = today.getFullYear();
-var hour = today.getHours();
-var minute = today.getMinutes();
-var second = today.getSeconds();
-
-if (mm.toString().length === 1) {
-  mm = "0" + mm;
-}
-if (dd.toString().length === 1) {
-  dd = "0" + dd;
-}
-if (hour.toString().length === 1) {
-  hour = "0" + hour;
-}
-if (minute.toString().length === 1) {
-  minute = "0" + minute;
-}
-if (second.toString().length == 1) {
-  second = "0" + second;
-}  
-
-today = yyyy + "/" + dd + "/" + mm + " " + hour + ":" + minute + ":" + second;
-
-
-
-let defaultOrders = {
-  nama: "",
-  alamat: "",
-  total: "",
-  order: "",
-  email: "",
-  createdAt: today,
-};
-
 const Checkout = () => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+  var hour = today.getHours();
+  var minute = today.getMinutes();
+  var second = today.getSeconds();
+
+  if (mm.toString().length === 1) {
+    mm = "0" + mm;
+  }
+  if (dd.toString().length === 1) {
+    dd = "0" + dd;
+  }
+  if (hour.toString().length === 1) {
+    hour = "0" + hour;
+  }
+  if (minute.toString().length === 1) {
+    minute = "0" + minute;
+  }
+  if (second.toString().length == 1) {
+    second = "0" + second;
+  }
+
+  today = yyyy + "/" + dd + "/" + mm + " " + hour + ":" + minute + ":" + second;
+
+  let defaultOrders = {
+    nama: "",
+    alamat: "",
+    total: "",
+    order: "",
+    email: "",
+    createdAt: today,
+  };
   const { cartItems, totalCartAmount } = useContext(ShopContext);
 
   const total = totalCartAmount();
@@ -51,6 +48,16 @@ const Checkout = () => {
 
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 
+  const validationCheck = () => {
+    let isValid = false;
+    if (!orders.alamat || !orders.email || !orders.nama) {
+      isValid = true;
+    } else {
+      isValid = false;
+    }
+
+    return isValid
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +68,13 @@ const Checkout = () => {
   };
 
   const handleSubmit = async () => {
-    if(total > 0){
+    if (total > 0) {
+      let v = validationCheck();
+      console.log(v)
+      if (v === true) {
+        console.log("x");
+        return
+      }
       try {
         const cartOrder = Object.entries(cartItems)
           .filter(([id, quantity]) => quantity > 0)
@@ -73,18 +86,16 @@ const Checkout = () => {
           total: total,
           order: cartOrder,
           email: orders.email,
-          createdAt: orders.createdAt
+          createdAt: orders.createdAt,
         });
         setIsOrderPlaced(true);
       } catch (error) {
         throw error;
       }
     } else {
-      console.log("Your cart is empty")
+      console.log("Your cart is empty");
     }
   };
-
-  
 
   return (
     <>
@@ -106,7 +117,7 @@ const Checkout = () => {
           </>
         ) : (
           <>
-            <form action="" method="post" onSubmit={handleSubmit}>
+            <form>
               <label htmlFor="">Nama</label>
               <br />
               <input
@@ -114,6 +125,7 @@ const Checkout = () => {
                 name="nama"
                 value={orders.nama}
                 onChange={handleChange}
+                required
               />
               <br />
               <label htmlFor="">Email</label>
@@ -123,6 +135,7 @@ const Checkout = () => {
                 name="email"
                 value={orders.email}
                 onChange={handleChange}
+                required
               />
               <br />
               <label htmlFor="">Alamat</label>
@@ -132,6 +145,7 @@ const Checkout = () => {
                 name="alamat"
                 value={orders.alamat}
                 onChange={handleChange}
+                required
               />
               <br />
               <p name="total" value={orders.total}>
