@@ -4,49 +4,17 @@ import { useContext } from "react";
 import CartItems from "../cart/CartItems";
 import { products } from "../../Products";
 import axios from "axios";
+import { Grid, TextField, Button } from "@mui/material";
 
 const Checkout = () => {
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, "0");
-  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-  var yyyy = today.getFullYear();
-  var hour = today.getHours();
-  var minute = today.getMinutes();
-  var second = today.getSeconds();
-
-  if (mm.toString().length === 1) {
-    mm = "0" + mm;
-  }
-  if (dd.toString().length === 1) {
-    dd = "0" + dd;
-  }
-  if (hour.toString().length === 1) {
-    hour = "0" + hour;
-  }
-  if (minute.toString().length === 1) {
-    minute = "0" + minute;
-  }
-  if (second.toString().length == 1) {
-    second = "0" + second;
-  }
-
-  today = yyyy + "/" + dd + "/" + mm + " " + hour + ":" + minute + ":" + second;
-
-  let defaultOrders = {
-    nama: "",
-    alamat: "",
-    total: "",
-    order: "",
-    email: "",
-    createdAt: today,
-  };
-  const { cartItems, totalCartAmount } = useContext(ShopContext);
+  const { cartItems, totalCartAmount, checkTimestamp } =
+    useContext(ShopContext);
 
   const total = totalCartAmount();
 
-  const [orders, setCustomerOrders] = useState(defaultOrders);
-
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+
+  let today = checkTimestamp();
 
   const validationCheck = () => {
     let isValid = false;
@@ -56,8 +24,19 @@ const Checkout = () => {
       isValid = false;
     }
 
-    return isValid
+    return isValid;
   };
+
+  let defaultOrders = {
+    nama: "",
+    alamat: "",
+    total: "",
+    order: "",
+    email: "",
+    createdAt: today,
+  };
+
+  const [orders, setCustomerOrders] = useState(defaultOrders);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,10 +49,10 @@ const Checkout = () => {
   const handleSubmit = async () => {
     if (total > 0) {
       let v = validationCheck();
-      console.log(v)
+      console.log(v);
       if (v === true) {
         console.log("x");
-        return
+        return;
       }
       try {
         const cartOrder = Object.entries(cartItems)
@@ -101,15 +80,17 @@ const Checkout = () => {
     <>
       <p>Checkout</p>
       <div>
-        <div className="item-list">
-          {products.map((product) => {
-            if (cartItems[product.id] !== 0) {
-              return <CartItems data={product} key={product.id} />;
-            } else {
-              return null;
-            }
-          })}
-        </div>
+        <Grid container justifyContent="center">
+          <div className="item-list">
+            {products.map((product) => {
+              if (cartItems[product.id] !== 0) {
+                return <CartItems data={product} key={product.id} />;
+              } else {
+                return null;
+              }
+            })}
+          </div>
+        </Grid>
         <br />
         {total === 0 ? (
           <>
@@ -118,9 +99,9 @@ const Checkout = () => {
         ) : (
           <>
             <form>
-              <label htmlFor="">Nama</label>
               <br />
-              <input
+              <TextField
+                label="Nama"
                 type="text"
                 name="nama"
                 value={orders.nama}
@@ -128,9 +109,10 @@ const Checkout = () => {
                 required
               />
               <br />
-              <label htmlFor="">Email</label>
+
               <br />
-              <input
+              <TextField
+                label="Email"
                 type="email"
                 name="email"
                 value={orders.email}
@@ -138,9 +120,10 @@ const Checkout = () => {
                 required
               />
               <br />
-              <label htmlFor="">Alamat</label>
+
               <br />
-              <input
+              <TextField
+                label="Alamat"
                 type="text"
                 name="alamat"
                 value={orders.alamat}
@@ -148,10 +131,14 @@ const Checkout = () => {
                 required
               />
               <br />
+              <br />
               <p name="total" value={orders.total}>
                 Total : Rp{total}
               </p>
-              <button onClick={handleSubmit}>Order</button>
+              <br />
+              <Button onClick={handleSubmit} variant="outlined">
+                Order
+              </Button>
             </form>
           </>
         )}

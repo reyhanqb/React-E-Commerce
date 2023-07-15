@@ -1,13 +1,23 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { ThemeProvider } from "@material-tailwind/react";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "serif",
+      textTransform: "none",
+      fontSize: 16,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ThemeProvider>
+  <ThemeProvider theme={theme}>
+    <React.StrictMode>
       <App />
-    </ThemeProvider>
-  </React.StrictMode>
+    </React.StrictMode>
+  </ThemeProvider>
 );

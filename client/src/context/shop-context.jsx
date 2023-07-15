@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import { products } from "../Products";
+import { createTheme } from "@mui/material/styles";
 
 export const ShopContext = createContext(null);
 
@@ -51,7 +52,8 @@ const ShopContextProvider = (props) => {
   };
 
   const removeItems = (id) => {
-    if(totalCartAmount != 0){
+    let x = totalCartAmount();
+    if(x != 0){
       setCartItems((prev) => ({ ...prev, [id]: prev[id] - 1 }));
     }
   };
@@ -70,6 +72,56 @@ const ShopContextProvider = (props) => {
     setWishlist((prev) => ({ ...prev, [id]: 0 }));
   };
 
+  const checkTimestamp = () => {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+    var hour = today.getHours();
+    var minute = today.getMinutes();
+    var second = today.getSeconds();
+
+    if (mm.toString().length === 1) {
+      mm = "0" + mm;
+    }
+    if (dd.toString().length === 1) {
+      dd = "0" + dd;
+    }
+    if (hour.toString().length === 1) {
+      hour = "0" + hour;
+    }
+    if (minute.toString().length === 1) {
+      minute = "0" + minute;
+    }
+    if (second.toString().length == 1) {
+      second = "0" + second;
+    }
+
+    today =
+      yyyy + "/" + dd + "/" + mm + " " + hour + ":" + minute + ":" + second;
+
+    return today;
+  };
+
+  const theme = createTheme({
+    typography: {
+      fontFamily: [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+    },
+  });
+
+  
+
   const contextValue = {
     cartItems,
     addItems,
@@ -80,6 +132,8 @@ const ShopContextProvider = (props) => {
     wishlist,
     wishlistAmount,
     removeWishlist,
+    checkTimestamp,
+    theme
   };
 
   return (

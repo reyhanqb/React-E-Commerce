@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom"
 import {
   Navbar,
-  MobileNav,
+  Collapse,
   Typography,
   IconButton,
 } from "@material-tailwind/react";
@@ -98,9 +98,9 @@ export default function Example() {
             </IconButton>
           </div>
         </div>
-        <MobileNav open={openNav}>
+        <Collapse open={openNav}>
           {navList}
-        </MobileNav>
+        </Collapse>
       </Navbar>
     </>
   );
