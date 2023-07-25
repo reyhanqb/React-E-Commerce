@@ -4,7 +4,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "react-ecommerce",
+  database: "ecommerce-db-test",
 });
 
 db.connect(function (err, result) {

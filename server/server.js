@@ -1,12 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const sessions = require("express-session");
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
 
-const Register = require("./routes/userAuth")
-const Login = require("./routes/auth");
-const Orders = require("./routes/auth")
-const CurrentOrder = require("./routes/userAuth");
+const Admin = require("./routes/auth");
+
+const Users = require("./routes/userAuth");
 
 let app = express();
 
@@ -16,30 +15,38 @@ dotenv.config({
   path: "./KEY.ENV",
 });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    secure: false,
+  })
+);
+
+app.options("*", cors());
+
 app.use(express.json());
 
 app.use(
   sessions({
-    secret: process.env.SECRET_KEY,
-    saveUninitialized: false,
+    secret: "hello",
     resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      expires: 360000
+    },
   })
 );
 
 // admin routes
-app.use("/admin", Login);
-app.use("/admin", Orders)
+app.use("/admin", Admin);
 
 // user routes
-app.use("/", Register)
-app.use("/", CurrentOrder)
+app.use("/", Users);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
-
-
-
-
-

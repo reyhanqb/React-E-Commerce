@@ -1,0 +1,11 @@
+{
+    "details": "2(2), 3(2)",
+    "total": 50000,
+    "user_email": "default@mail.com",
+    "address": "foo",
+    "city": "bar",
+    "province": "foobar",
+    "zipcode": "12723",
+    "name": "barfoo",
+    "date_created": "2023-07-26 00:20:30"
+}
