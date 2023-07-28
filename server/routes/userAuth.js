@@ -2,41 +2,40 @@ const express = require("express");
 const db = require("../database");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const session = require("express-session");
-const multer = require("multer")
-const path = require("path")
+const multer = require("multer");
 
 const router = express.Router();
-
-router.use(session({ secret: "xyz", saveUninitialized: false, resave: false }));
 
 dotenv.config({
   path: "./KEY.ENV",
 });
 
 const storage = multer.diskStorage({
-  destination: "./src/assets",
+  destination: "./payments",
   filename: (req, file, callback) => {
-    const ext = file.mimetype.split("/")[1]
-    callback(
-      null,
-      `${file.fieldname}-${Date.now()}.${ext}`
-    );
+    const ext = file.mimetype.split("/")[1];
+    callback(null, `${file.fieldname}-${Date.now()}.${ext}`);
   },
 });
 
-
-
 const upload = multer({ storage: storage });
 
+router.get("/sessions", async (req, res) => {
+  const token = req.cookies['connect.sid'] || "";
+  if (token) {
+    res.status(200).send("Session created");;
+  } else {
+    res.status(500);
+  }
+});
 
 router.post("/register", (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, pwd, email } = req.body;
 
   const query =
     "INSERT INTO users (username, user_email, PASSWORD) VALUES (?, ?, ?)";
 
-  db.query(query, [username, email, password], async (error, results) => {
+  db.query(query, [username, email, pwd], async (error, results) => {
     if (error) {
       res.status(500).send("Error : ", error);
     } else {
@@ -66,9 +65,10 @@ router.post("/user-login", (req, res) => {
           let match = password === strp;
 
           if (match) {
+            req.session.user = user
             let email = user.user_email;
             let uname = user.username;
-
+            
             console.log("Logged in");
             const userToken = jwt.sign({ username, password }, jwtKey, {
               noTimestamp: true,
@@ -97,8 +97,8 @@ router.get("/user-login", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("session.sid")
-  res.send("Cookie cleared")
+  res.clearCookie("session.sid");
+  res.send("Cookie cleared");
 });
 
 router.post("/create-orders", async (req, res) => {
@@ -112,8 +112,8 @@ router.post("/create-orders", async (req, res) => {
     province,
     zipcode,
     createdAt,
-    token
-  } = req.body
+    token,
+  } = req.body;
   let query = `INSERT INTO orders (details, user_email, address, total, name, city, province, zipcode, date_created, payment_token) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   try {
     db.query(
@@ -128,12 +128,12 @@ router.post("/create-orders", async (req, res) => {
         province,
         zipcode,
         createdAt,
-        token
+        token,
       ],
       (err, result) => {
         if (err) throw err;
 
-        console.log(token)
+        console.log(token);
         res.send(result);
       }
     );
@@ -147,7 +147,7 @@ router.post(
   upload.single("payment_proof"),
   async (req, res) => {
     let { payment_method, account, payment_token } = req.body;
-    let payment_proof = req.file.filename
+    let payment_proof = req.file.filename;
 
     if (!payment_proof) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -173,7 +173,5 @@ router.post(
     );
   }
 );
-
-
 
 module.exports = router;

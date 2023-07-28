@@ -13,6 +13,8 @@ dotenv.config({
 
 router.options("/complete-orders/:id", cors());
 
+
+
 router.post("/login", (req, res) => {
   const { username, pwd } = req.body;
   const jwtKey = process.env.SECRET_KEY;
@@ -84,16 +86,14 @@ router.put("/complete-orders/:id", cors(), async (req, res) => {
   }
 });
 
-router.get("/payment-details/:token", async (req, res) => {
-  let token = req.params.token
+router.get("/payment-details/:token", (req, res) => {
+  let token = req.query.token
   let query = "SELECT * FROM payment WHERE payment_token = ?"
 
   try {
     db.query(query, [token], async (err, result) => {
       if(err)
         throw err;
-
-      console.log(token)
   
       res.status(200)
       res.send(result)

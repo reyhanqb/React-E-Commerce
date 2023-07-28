@@ -1,19 +1,20 @@
-import React from 'react'
-import { Outlet, Navigate } from "react-router-dom"
+import { Outlet, Navigate } from "react-router-dom";
 
 const PrivateRoutes = () => {
-    let authenticated;
-    if(localStorage.getItem("token") == null){
-      authenticated = false
-    } else {
-      authenticated = true
-    }
+  let authenticated;
 
-  return (
-    <> 
-    {authenticated === true ? <Outlet/> : <Navigate to={"/"}/>}
-    </>
-  )
-}
+  let userToken = localStorage.getItem("userToken");
+  let adminToken = localStorage.getItem("token");
 
-export default PrivateRoutes
+  if (userToken || adminToken) {
+    authenticated = true;
+  } else {
+    authenticated = false;
+  }
+
+  console.log(userToken)
+
+  return <>{authenticated === true ? <Outlet /> : <Navigate to={"/login"} />}</>;
+};
+
+export default PrivateRoutes;

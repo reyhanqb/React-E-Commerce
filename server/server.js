@@ -2,12 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const sessions = require("express-session");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser")
 
 const Admin = require("./routes/auth");
 
 const Users = require("./routes/userAuth");
 
 let app = express();
+
+app.use(cookieParser())
 
 const port = 3001;
 
@@ -35,7 +38,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       secure: false,
-      httpOnly: true,
+      // httpOnly: true,
       expires: 360000
     },
   })

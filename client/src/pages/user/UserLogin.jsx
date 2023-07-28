@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { URL } from "../../api/url";
 import { useNavigate } from "react-router-dom";
 
 const UserLogin = () => {
@@ -24,13 +24,17 @@ const UserLogin = () => {
   const handleSubmit = async () => {
     if (credentials.password && credentials.username !== null) {
       try {
-        const res = await axios.post("http://localhost:3001/login", {
-          username: credentials.username,
-          pwd: credentials.password,
-        });
-        const userToken = res.data.userToken
+        const res = await URL.post("/user-login", credentials);
+        console.log(res)
+        const { uname, email, userToken } = res.data
         localStorage.setItem("userToken", userToken)
-        nav("/")
+        localStorage.setItem("username", uname)
+        localStorage.setItem("email", email);
+        if(res.data.status === 200){
+          nav("/shop")
+        } else {
+          setError(true)
+        }
       } catch (error) {
         console.log(error);
       }

@@ -98,7 +98,7 @@ const ShopContextProvider = (props) => {
     }
 
     today =
-      yyyy + "/" + dd + "/" + mm + " " + hour + ":" + minute + ":" + second;
+      yyyy + "-" + mm + "-" + dd + " " + hour + ":" + minute + ":" + second;
 
     return today;
   };

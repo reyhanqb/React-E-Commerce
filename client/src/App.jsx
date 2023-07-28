@@ -9,6 +9,9 @@ import Wishlist from "./pages/cart/Wishlist";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import PrivateRoutes from "./utils/PrivateRoutes";
+import Registration from "./pages/user/Registration";
+import UserLogin from "./pages/user/UserLogin";
+import Homepage from "./pages/shop/Homepage"
 
 function App() {
   return (
@@ -18,18 +21,21 @@ function App() {
           <Router>
             <Navbar />
             <Routes>
-              <Route path="/" element={<Shop />} />
-              <Route path="cart" element={<Carts />} />
-              <Route path="checkout" element={<Checkout />} />
-              <Route path="wishlist" element={<Wishlist />} />
+              <Route path="/" element={<Homepage/>}/>
+              <Route path="/login" element={<UserLogin />} />
+              <Route path="/register" element={<Registration />} />
               <Route path="admin/login" element={<AdminLogin />} />
-              {/* admin only */}
+              {/* protected routes */}
               <Route element={<PrivateRoutes />}>
                 <Route
                   path="admin/dashboard"
                   element={<AdminDashboard />}
                   exact
                 />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="cart" element={<Carts />} />
+                <Route path="checkout" element={<Checkout />} />
+                <Route path="wishlist" element={<Wishlist />} />
               </Route>
             </Routes>
           </Router>
