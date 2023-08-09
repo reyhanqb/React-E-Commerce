@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("../database");
+const db = require("./database");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const multer = require("multer");
@@ -21,9 +21,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/sessions", async (req, res) => {
-  const token = req.cookies['connect.sid'] || "";
+  const token = req.cookies["connect.sid"] || "";
   if (token) {
-    res.status(200).send("Session created");;
+    res.status(200).send("Session created");
   } else {
     res.status(500);
   }
@@ -65,10 +65,10 @@ router.post("/user-login", (req, res) => {
           let match = password === strp;
 
           if (match) {
-            req.session.user = user
+            req.session.user = user;
             let email = user.user_email;
             let uname = user.username;
-            
+
             console.log("Logged in");
             const userToken = jwt.sign({ username, password }, jwtKey, {
               noTimestamp: true,
@@ -88,18 +88,18 @@ router.post("/user-login", (req, res) => {
   });
 });
 
-router.get("/user-login", (req, res) => {
-  if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
-  } else {
-    res.send({ loggedIn: false });
-  }
-});
+// router.get("/user-login", (req, res) => {
+//   if (req.session.user) {
+//     res.send({ loggedIn: true, user: req.session.user });
+//   } else {
+//     res.send({ loggedIn: false });
+//   }
+// });
 
-router.get("/logout", (req, res) => {
-  res.clearCookie("session.sid");
-  res.send("Cookie cleared");
-});
+// router.get("/logout", (req, res) => {
+//   res.clearCookie("session.sid");
+//   res.send("Cookie cleared");
+// });
 
 router.post("/create-orders", async (req, res) => {
   let {

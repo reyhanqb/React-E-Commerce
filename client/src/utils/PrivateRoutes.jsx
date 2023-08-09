@@ -1,20 +1,53 @@
-import { Outlet, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, Navigate, useNavigate } from "react-router-dom";
+import { URL } from "../api/url";
 
 const PrivateRoutes = () => {
-  let authenticated;
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const nav = useNavigate();
 
-  let userToken = localStorage.getItem("userToken");
-  let adminToken = localStorage.getItem("token");
+  useEffect(() => {
+    const sessionCheck = async () => {
+      try {
+        setLoading(true);
+        const res = await URL.get("/auth/sessions");
+        console.log("p")
+        console.log(res.data.status);
+        if (res.data.status === 200 || res.data.status === 201) {
+          setAuthenticated(true);
+          setLoading(false);
+        } else {
+          localStorage.clear();
+          setAuthenticated(false);
+          nav("/login");
+        }
+      } catch (error) {
+        console.log(error);
+        setAuthenticated(false);
+        nav("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (userToken || adminToken) {
-    authenticated = true;
-  } else {
-    authenticated = false;
+    sessionCheck();
+  }, [authenticated]);
+
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  console.log(userToken)
-
-  return <>{authenticated === true ? <Outlet /> : <Navigate to={"/login"} />}</>;
+  return (
+    <>
+      {authenticated ? (
+        <Outlet />
+      ) : (
+        <Navigate to={"/login"} replace={true} />
+      )}
+    </>
+  );
 };
 
 export default PrivateRoutes;

@@ -60,31 +60,31 @@ const Checkout = () => {
   };
 
   const handleSubmit = async () => {
+    let user_email = localStorage.getItem("email")
+    let user = localStorage.getItem("user")
     if (total > 0) {
-      // let v = validationCheck();
-      // console.log(v);
-      // if (v === true) {
-      //   console.log("x");
-      //   console.log(orders)
-      //   return;
-      // }
+      let v = validationCheck();
+      console.log(v);
+      if (v === true) {
+        console.log("x");
+        console.log(orders)
+        return;
+      }
       setToken(uuid.v4());
       try {
         const cartOrder = Object.entries(cartItems)
           .filter(([id, quantity]) => quantity > 0)
           .map(([id, quantity]) => `${id}(${quantity})`)
           .join(", ");
-        let c = "p";
-        let p = "c";
         const res = await axios.post("http://localhost:3001/create-orders", {
-          nama: orders.nama,
+          nama: user,
           address: orders.address,
           total: total,
           details: cartOrder,
           city: cities,
           province: provinces,
           zipcode: orders.zipcode,
-          email: orders.email,
+          email: user_email,
           createdAt: orders.createdAt,
           token: token,
         });
@@ -97,61 +97,6 @@ const Checkout = () => {
     } else {
       console.log("Your cart is empty");
     }
-  };
-
-  const [provinces, setProvinces] = useState([]);
-  const [cities, setCities] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"
-      );
-      setProvinces(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleProvinceChange = async (provinceId) => {
-    try {
-      const response = await axios.get(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`
-      );
-      setCities(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleCityChange = async (cityId) => {
-    try {
-      const response = await axios.get(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${cityId}.json`
-      );
-      setDistricts(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleChangeCity = (e) => {
-    const { value } = e.target;
-    setCustomerOrders((prevState) => ({
-      ...prevState,
-      city: value,
-    }));
-  };
-  const handleChangeProvince = (e) => {
-    const { value } = e.target;
-    setCustomerOrders((prevState) => ({
-      ...prevState,
-      province: value,
-    }));
   };
 
   return (
@@ -190,23 +135,6 @@ const Checkout = () => {
                 alignItems={"center"}
               >
                 <TextField
-                  label="Nama"
-                  type="text"
-                  name="nama"
-                  value={orders.nama}
-                  onChange={handleChange}
-                  required
-                />
-                <TextField
-                  label="Email"
-                  type="email"
-                  name="email"
-                  value={orders.email}
-                  onChange={handleChange}
-                  required
-                />
-
-                <TextField
                   label="Address"
                   type="text"
                   name="address"
@@ -214,29 +142,22 @@ const Checkout = () => {
                   onChange={handleChange}
                   required
                 />
-
-                <div>
-                  <label>Provinsi:</label>
-                  <select onChange={{ handleChangeProvince }}>
-                    <option value="">Pilih Provinsi</option>
-                    {provinces.map((province) => (
-                      <option key={province.id} value={province.name}>
-                        {province.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label>Kota/Kabupaten:</label>
-                  <select onChange={(e) => handleCityChange(e.target.value)}>
-                    <option value="">Pilih Kota/Kabupaten</option>
-                    {cities.map((city) => (
-                      <option key={city.id} value={city.id}>
-                        {city.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <TextField
+                  label="Province"
+                  type="text"
+                  name="address"
+                  value={orders.province}
+                  onChange={handleChange}
+                  required
+                />
+                <TextField
+                  label="City"
+                  type="text"
+                  name="address"
+                  value={orders.city}
+                  onChange={handleChange}
+                  required
+                />
                 <TextField
                   label="Zip code"
                   type="text"

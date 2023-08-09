@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
+import { URL } from "../../api/url";
 
-const api = axios.create({
-  baseURL: "http://localhost:3001/admin",
-});
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({
@@ -18,15 +15,18 @@ const AdminLogin = () => {
 
   const adminLogin = async () => {
     try {
-      const res = await api.post("/login", credentials);
-      if (res.data.status === 200 && res.data.accessToken !== null) {
-        nav("/admin/dashboard");
-        localStorage.setItem("token", res.data.accessToken);
+      const res = await URL.post("/auth/admin/login", credentials);
+      if (res.data.status !== 200) {
+        nav("/");
+        console.log("p")
+        // localStorage.setItem("adminToken", res.data.accessToken);
+      } else {
+        nav("/admin/dashboard")
       }
     } catch (error) {
       console.log(error);
+      setErrorMsg(true);
     }
-    setErrorMsg(true);
   };
 
   const handleInputChange = (e) => {
@@ -48,7 +48,7 @@ const AdminLogin = () => {
       <br />
       <TextField
         label="Password"
-        type="text"
+        type="password"
         name="pwd"
         value={credentials.pwd}
         onChange={handleInputChange}

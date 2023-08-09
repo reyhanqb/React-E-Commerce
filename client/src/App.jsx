@@ -11,7 +11,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import Registration from "./pages/user/Registration";
 import UserLogin from "./pages/user/UserLogin";
-import Homepage from "./pages/shop/Homepage"
+import Homepage from "./pages/shop/Homepage";
 
 function App() {
   return (
@@ -19,23 +19,55 @@ function App() {
       <div className="App">
         <ShopContextProvider>
           <Router>
-            <Navbar />
             <Routes>
-              <Route path="/" element={<Homepage/>}/>
+              <Route path="/" element={<Homepage />} />
               <Route path="/login" element={<UserLogin />} />
-              <Route path="/register" element={<Registration />} />
               <Route path="admin/login" element={<AdminLogin />} />
+              <Route path="/register" element={<Registration />} />
               {/* protected routes */}
               <Route element={<PrivateRoutes />}>
                 <Route
-                  path="admin/dashboard"
-                  element={<AdminDashboard />}
-                  exact
+                  path="/shop"
+                  element={
+                    <>
+                      <Navbar />
+                      <Shop />
+                    </>
+                  }
                 />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="cart" element={<Carts />} />
-                <Route path="checkout" element={<Checkout />} />
-                <Route path="wishlist" element={<Wishlist />} />
+                <Route
+                  path="cart"
+                  element={
+                    <>
+                      <Navbar />
+                      <Carts />
+                    </>
+                  }
+                />
+                <Route
+                  path="checkout"
+                  element={
+                    <>
+                      <Navbar />
+                      <Checkout />
+                    </>
+                  }
+                />
+                <Route
+                  path="wishlist"
+                  element={
+                    <>
+                      <Navbar />
+                      <Wishlist />
+                    </>
+                  }
+                />
+              <Route path="/admin/dashboard" element={
+              <>
+              <Navbar/>
+              <AdminDashboard />
+              </>
+              } />
               </Route>
             </Routes>
           </Router>

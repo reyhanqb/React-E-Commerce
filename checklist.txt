@@ -1,5 +1,0 @@
-features
-- user must login and register to create orders => create homepage, protected routes for users
-- check order status for admin
-- upgrade password storing to bcrypt
-- upgrade authentication using express session

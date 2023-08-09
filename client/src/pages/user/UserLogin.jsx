@@ -24,16 +24,15 @@ const UserLogin = () => {
   const handleSubmit = async () => {
     if (credentials.password && credentials.username !== null) {
       try {
-        const res = await URL.post("/user-login", credentials);
+        const res = await URL.post("/auth/user/login", credentials);
         console.log(res)
-        const { uname, email, userToken } = res.data
-        localStorage.setItem("userToken", userToken)
-        localStorage.setItem("username", uname)
-        localStorage.setItem("email", email);
-        if(res.data.status === 200){
-          nav("/shop")
+        if(res.data.status !== 200){
+          nav("/")
         } else {
-          setError(true)
+          let user = res.data.user
+          localStorage.setItem("user", user.username);
+          localStorage.setItem("email", user.email);
+          nav("/shop")
         }
       } catch (error) {
         console.log(error);

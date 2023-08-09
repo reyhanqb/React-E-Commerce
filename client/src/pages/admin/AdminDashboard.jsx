@@ -14,6 +14,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchCurrentOrders();
+    console.log("X")
   }, []);
 
   const a = () => {
