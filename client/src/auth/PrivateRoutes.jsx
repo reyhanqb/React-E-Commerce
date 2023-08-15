@@ -12,8 +12,6 @@ const PrivateRoutes = () => {
       try {
         setLoading(true);
         const res = await URL.get("/auth/sessions");
-        console.log("p")
-        console.log(res.data.status);
         if (res.data.status === 200 || res.data.status === 201) {
           setAuthenticated(true);
           setLoading(false);

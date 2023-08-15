@@ -37,9 +37,13 @@ const Checkout = () => {
     return isValid;
   };
 
+  let user_email = localStorage.getItem("email");
+  let user = localStorage.getItem("user");
+
+
   let defaultOrders = {
-    nama: "",
-    email: "",
+    nama: user,
+    email: user_email,
     details: "",
     address: "",
     city: "",
@@ -50,6 +54,7 @@ const Checkout = () => {
   };
 
   const [orders, setCustomerOrders] = useState(defaultOrders);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,8 +65,6 @@ const Checkout = () => {
   };
 
   const handleSubmit = async () => {
-    let user_email = localStorage.getItem("email")
-    let user = localStorage.getItem("user")
     if (total > 0) {
       let v = validationCheck();
       console.log(v);
@@ -81,8 +84,8 @@ const Checkout = () => {
           address: orders.address,
           total: total,
           details: cartOrder,
-          city: cities,
-          province: provinces,
+          city: orders.city,
+          province: orders.province,
           zipcode: orders.zipcode,
           email: user_email,
           createdAt: orders.createdAt,
@@ -91,6 +94,7 @@ const Checkout = () => {
         console.log(res);
         setIsOrderPlaced(true);
         localStorage.setItem("token", token);
+        nav("/paywall")
       } catch (error) {
         throw error;
       }
@@ -101,83 +105,85 @@ const Checkout = () => {
 
   return (
     <>
-      <p>Checkout</p>
-      <div>
-        <Grid
-          container
-          justifyContent="center"
-          gap={2}
-          direction={"column"}
-          flex={"column"}
-          alignItems={"center"}
-        >
-          <div className="item-list">
-            {products.map((product) => {
-              if (cartItems[product.id] !== 0) {
-                return <CartItems data={product} key={product.id} />;
-              } else {
-                return null;
-              }
-            })}
-          </div>
-          {total === 0 ? (
-            <>
-              <p>Your cart is empty</p>
-            </>
-          ) : (
-            <>
-              <Grid
-                sx={{ display: "flex", textAlign: "center" }}
-                gap={2}
-                direction={"column"}
-                maxWidth={"450px"}
-                justifycontent="center"
-                alignItems={"center"}
-              >
-                <TextField
-                  label="Address"
-                  type="text"
-                  name="address"
-                  value={orders.address}
-                  onChange={handleChange}
-                  required
-                />
-                <TextField
-                  label="Province"
-                  type="text"
-                  name="address"
-                  value={orders.province}
-                  onChange={handleChange}
-                  required
-                />
-                <TextField
-                  label="City"
-                  type="text"
-                  name="address"
-                  value={orders.city}
-                  onChange={handleChange}
-                  required
-                />
-                <TextField
-                  label="Zip code"
-                  type="text"
-                  name="zipcode"
-                  value={orders.zipcode}
-                  onChange={handleChange}
-                  required
-                />
-                <Typography>Total : Rp{total}</Typography>
+      {isOrderPlaced ? (
+        <p>Terima kasih!</p>
+      ) : (
+        <div>
+          <Grid
+            container
+            justifyContent="center"
+            gap={2}
+            direction={"column"}
+            flex={"column"}
+            alignItems={"center"}
+          >
+            <div className="item-list">
+              {products.map((product) => {
+                if (cartItems[product.id] !== 0) {
+                  return <CartItems data={product} key={product.id} />;
+                } else {
+                  return null;
+                }
+              })}
+            </div>
+            {total === 0 ? (
+              <>
+                <p>Your cart is empty</p>
+              </>
+            ) : (
+              <>
+                <Grid
+                  sx={{ display: "flex", textAlign: "center" }}
+                  gap={2}
+                  direction={"column"}
+                  maxWidth={"450px"}
+                  justifycontent="center"
+                  alignItems={"center"}
+                >
+                  <TextField
+                    label="Address"
+                    type="text"
+                    name="address"
+                    value={orders.address}
+                    onChange={handleChange}
+                    required
+                  />
+                  <TextField
+                    label="Province"
+                    type="text"
+                    name="province"
+                    value={orders.province}
+                    onChange={handleChange}
+                    required
+                  />
+                  <TextField
+                    label="City"
+                    type="text"
+                    name="city"
+                    value={orders.city}
+                    onChange={handleChange}
+                    required
+                  />
+                  <TextField
+                    label="Zip code"
+                    type="text"
+                    name="zipcode"
+                    value={orders.zipcode}
+                    onChange={handleChange}
+                    required
+                  />
+                  <Typography>Total : Rp{total}</Typography>
+                  <br />
+                  <Button onClick={handleSubmit} variant="outlined">
+                    Order
+                  </Button>
+                </Grid>
                 <br />
-                <Button onClick={handleSubmit} variant="outlined">
-                  Order
-                </Button>
-              </Grid>
-              <br />
-            </>
-          )}
-        </Grid>
-      </div>
-      {isOrderPlaced ? <p>Terima kasih!</p> : null}
+              </>
+            )}
+          </Grid>
+        </div>
+      )}
     </>
   );
 };

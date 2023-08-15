@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { URL } from "../../api/url";
 import { Link, useNavigate } from "react-router-dom";
+import { URL } from "../../api/url";
 import Header from "../../partials/Header";
 import Banner from "../../partials/Banner";
 
-
-const UserLogin = () => {
+function SignIn() {
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
@@ -31,17 +30,17 @@ const UserLogin = () => {
         console.log(res);
         if (res.data.status !== 200) {
           nav("/");
-        } else {
-          let user = res.data.user;
-          localStorage.setItem("user", user.username);
-          localStorage.setItem("email", user.email);
-          nav("/shop");
         }
+        let user = res.data.user;
+        localStorage.setItem("user", user.username);
+        localStorage.setItem("email", user.email);
+        nav("/shop");
       } catch (error) {
         console.log(error);
       }
     } else {
       setError(true);
+      return error;
     }
   };
   return (
@@ -64,14 +63,12 @@ const UserLogin = () => {
                 <form>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
-                      <div className="flex justify-between">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="username"
-                        >
-                          Username
-                        </label>
-                      </div>
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="username"
+                      >
+                        Username
+                      </label>
                       <input
                         id="email"
                         className="form-input w-full text-gray-800"
@@ -109,7 +106,6 @@ const UserLogin = () => {
                   <div className="flex flex-wrap -mx-3 mt-6">
                     <div className="w-full px-3">
                       <button
-                        type="button"
                         onClick={handleSubmit}
                         className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
                       >
@@ -133,22 +129,21 @@ const UserLogin = () => {
                 <div className="text-gray-600 text-center mt-6">
                   Dont have an account?{" "}
                   <Link
-                    to="/register"
+                    to="/signup"
                     className="text-blue-600 hover:underline transition duration-150 ease-in-out"
                   >
-                    Register
+                    Sign up
                   </Link>
                 </div>
               </div>
             </div>
           </div>
-          {error ? <>Invalid credentials.</> : null}
         </section>
       </main>
 
       <Banner />
     </div>
   );
-};
+}
 
-export default UserLogin;
+export default SignIn;

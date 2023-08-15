@@ -18,36 +18,26 @@ const Product = (props) => {
   const cartItemAmount = cartItems[id];
 
   return (
-    <Card sx={{ display: "flex", gap: 2 }} justifycontent="center">
-      <CardActionArea>
-        <CardContent sx={{ flex: 1 }}>
-          <CardMedia
-            component="img"
-            height="140px"
-            image={image}
-          ></CardMedia>
-          <Typography>{name}</Typography>
-          <Typography>{price}</Typography>
-          <br />
-          <Button
-            startIcon={<Add />}
-            onClick={() => {
-              addItems(id);
-            }}
-          ></Button>
-          {cartItemAmount}
-          <Button
-            startIcon={<Remove />}
-            aria-label="delete"
-            onClick={() => {
-              removeItems(id);
-            }}
-          ></Button>
-          <br />
-          <Button onClick={() => addWishlist(id)}>Add to wishlist</Button>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+    <>
+      <section className="bg-white py-8">
+        <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+        <Card sx={{ display: "flex", gap: 2 }} justifycontent="center">
+          <CardActionArea>
+            <CardContent sx={{ flex: 1 }}>
+              <CardMedia
+                component="img"
+                height="140px"
+                image={image}
+              ></CardMedia>
+              <Typography>{name}</Typography>
+              <Typography>{price}</Typography>
+              <br />
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        </div>
+      </section>
+    </>
   );
 };
 

@@ -14,7 +14,6 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchCurrentOrders();
-    console.log("X")
   }, []);
 
   const a = () => {
@@ -58,17 +57,16 @@ const AdminDashboard = () => {
       });
   };
 
-  const getPaymentStatus = async (token) => {
-    await URL.get(`/admin/payment-details/:${token}`, {
-      params: { token: token },
-    })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+const getPaymentStatus = async (token) => {
+  try {
+    const response = await URL.post(`/admin/payment-details/:${token}`, {
+      params: token 
+    });
+    console.log(response.data)
+  } catch (error) {
+    console.log(error);
   }
+};
 
   return (
     <>
@@ -99,7 +97,7 @@ const AdminDashboard = () => {
                     <tr key={p.order_id}>
                       <td className="tg-0lax">{p.order_id}</td>
                       <td className="tg-0lax">{p.name}</td>
-                      <td className="tg-0lax">{p.user_email}</td>
+                      <td className="tg-0lax">{p.email}</td>
                       <td className="tg-0lax">{p.address}</td>
                       <td className="tg-0lax">{p.details}</td>
                       <td className="tg-0lax">{p.province}</td>

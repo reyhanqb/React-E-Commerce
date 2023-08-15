@@ -25,7 +25,7 @@ export default function Example() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <Link to={"/"}>Shop</Link>
+        <Link to={"/shop"}>Shop</Link>
       </Typography>
       <Typography
         as="li"

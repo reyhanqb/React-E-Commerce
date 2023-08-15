@@ -114,7 +114,7 @@ router.post("/create-orders", async (req, res) => {
     createdAt,
     token,
   } = req.body;
-  let query = `INSERT INTO orders (details, user_email, address, total, name, city, province, zipcode, date_created, payment_token) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  let query = `INSERT INTO orders (details, email, address, total, name, city, province, zipcode, date_created, payment_token) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   try {
     db.query(
       query,

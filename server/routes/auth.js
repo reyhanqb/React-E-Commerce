@@ -1,7 +1,5 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const sqlz = require("./db.sequelize");
-const db = require("./routes/database");
+const db = require("./database");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
@@ -45,21 +43,27 @@ router.put("/complete-orders/:id", cors(), async (req, res) => {
   }
 });
 
-router.get("/payment-details/:token", (req, res) => {
-  let token = req.query.token;
+router.post("/payment-details/:token", async (req, res) => {
+  let token = req.params.token;
+  token = token.replace(":", "");
+  console.log(token)
+
   let query = "SELECT * FROM payment WHERE payment_token = ?";
 
   try {
     db.query(query, [token], async (err, result) => {
       if (err) throw err;
 
-      res.status(200);
+      
       res.send(result);
+      res.sendFile(`${result[0].payment_proof}`, { root: './payments/'})
+      
     });
   } catch (error) {
     console.log(error);
   }
 });
+
 
 
 module.exports = router;
