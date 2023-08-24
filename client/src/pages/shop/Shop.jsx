@@ -1,32 +1,16 @@
 import { products } from "../../Products";
 import Product from "./Product";
-import { Grid } from "@mui/material";
-import {URL} from "../../api/url"
-import { useNavigate } from "react-router-dom";
-
 
 const Shop = () => {
-
-  const nav = useNavigate()
-
-  const x = async () => {
-    await URL.post("/auth/logout")
-    localStorage.clear()
-    nav("/login")
-  }
-
   return (
     <>
-      <div className="shop">
+      <div className="flex">
         <br />
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
+        <div className="flex flex-row gap-1 justify-between mt-5 p-2 top-0 max-w-full">
           {products.map((product) => (
-            <Grid item xs={6} sm={3} key={product.id}>
-              <Product data={product} />
-            </Grid>
+            <Product data={product} />
           ))}
-        </Grid>
-        <button onClick={x}>Log out</button>
+        </div>
       </div>
     </>
   );

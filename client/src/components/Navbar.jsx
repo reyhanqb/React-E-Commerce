@@ -41,8 +41,16 @@ export default function Example() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <Link to={"/wishlist"}>Wishlist</Link>
+        <Link to={"/wishlist"}>Wishlist</Link> 
       </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <Link to={"/orders"}>Profile</Link>
+        </Typography>
     </ul>
   );
 

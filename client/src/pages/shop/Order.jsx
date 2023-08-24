@@ -8,6 +8,7 @@ import Testimonials from "../../partials/Testimonials";
 import Newsletter from "../../partials/Newsletter";
 import Footer from "../../partials/Footer";
 import Banner from "../../partials/Banner";
+import Navbar from "../../components/Navbar"
 
 function Home() {
   return (
@@ -15,11 +16,13 @@ function Home() {
       {/*  Site header */}
       <Header />
 
+      {/* <Navbar/> */}
+
       {/*  Page content */}
       <main className="flex-grow">
         {/*  Page sections */}
         <HeroHome />
-        <FeaturesHome />
+        {/* <FeaturesHome /> */}
         <FeaturesBlocks />
         {/* <Testimonials />
         <Newsletter /> */}

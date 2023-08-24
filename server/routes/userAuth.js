@@ -88,19 +88,6 @@ router.post("/user-login", (req, res) => {
   });
 });
 
-// router.get("/user-login", (req, res) => {
-//   if (req.session.user) {
-//     res.send({ loggedIn: true, user: req.session.user });
-//   } else {
-//     res.send({ loggedIn: false });
-//   }
-// });
-
-// router.get("/logout", (req, res) => {
-//   res.clearCookie("session.sid");
-//   res.send("Cookie cleared");
-// });
-
 router.post("/create-orders", async (req, res) => {
   let {
     nama,
@@ -173,5 +160,31 @@ router.post(
     );
   }
 );
+
+router.post("/orders/current", async (req, res) => {
+  let username = req.body.username
+  console.log(username)
+  let query = "SELECT * FROM orders WHERE name = ?";
+
+  db.query(query, [username], (err, result) => {
+    if(err)
+      throw err;
+
+    console.log(result)
+    res.send(result)
+  })
+})
+
+router.post("/payment/details/:id", async (req, res) => {
+  const id = req.params.id
+  const query = "SELECT * FROM orders WHERE payment_token = ?"
+
+  db.query(query, [id], (err, result) => {
+    if(err)
+      throw err;
+
+    console.log(result)
+  })
+})
 
 module.exports = router;
