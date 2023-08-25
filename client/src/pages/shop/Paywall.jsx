@@ -12,6 +12,7 @@ const Paywall = () => {
     account: "",
     payment_proof: null,
   });
+  const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,54 +51,65 @@ const Paywall = () => {
         }
       );
       console.log(response.data);
+      
     } catch (error) {
       console.log(error);
+    } finally {
+      setSubmitted(true)
     }
   };
 
   return (
     <>
-      <br />
-      <Grid
-        container
-        gap={2}
-        justifyContent={"center"}
-        alignItems={"center"}
-        sx={{ display: "flex", flexDirection: "column" }}
-      >
-        <FormControl sx={{ minWidth: 300 }}>
-          <InputLabel>Payment method</InputLabel>
-          <Select
-            value={method.payment_method}
-            label="Method"
-            onChange={handleChange}
-            style={{ maxWidth: "100%" }}
-            name="payment_method"
+      {submitted ? (
+        <>
+          <p>Thank you. We will process your order shortly</p>
+        </>
+      ) : (
+        <>
+          <br />
+          <Grid
+            container
+            gap={2}
+            justifyContent={"center"}
+            alignItems={"center"}
+            sx={{ display: "flex", flexDirection: "column" }}
           >
-            <MenuItem value={"Transfer Bank"}>Transfer Bank</MenuItem>
-            <MenuItem value={"OVO"}>OVO</MenuItem>
-            <MenuItem value={"Dana"}>Dana</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField
-          placeholder="Account number"
-          variant="outlined"
-          sx={{ width: 300 }}
-          onChange={handleChange}
-          value={method.account}
-          name="account"
-        />
-        <InputLabel htmlFor="myfile">Payment proof</InputLabel>
-        <input
-        formEncType="multipart/form-data"
-          type="file"
-          id="myfile"
-          name="payment_proof"
-          accept="image/*"
-          onChange={handleFileInput}
-        />
-      </Grid>
-      <Button onClick={handleSubmit}>Submit</Button>
+            <FormControl sx={{ minWidth: 300 }}>
+              <InputLabel>Payment method</InputLabel>
+              <Select
+                value={method.payment_method}
+                label="Method"
+                onChange={handleChange}
+                style={{ maxWidth: "100%" }}
+                name="payment_method"
+              >
+                <MenuItem value={"Transfer Bank"}>Transfer Bank</MenuItem>
+                <MenuItem value={"OVO"}>OVO</MenuItem>
+                <MenuItem value={"Dana"}>Dana</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              placeholder="Account number"
+              variant="outlined"
+              sx={{ width: 300 }}
+              onChange={handleChange}
+              value={method.account}
+              name="account"
+            />
+            <InputLabel htmlFor="myfile">Payment proof</InputLabel>
+            <input
+              formEncType="multipart/form-data"
+              type="file"
+              id="myfile"
+              name="payment_proof"
+              accept="image/*"
+              onChange={handleFileInput}
+            />
+          </Grid>
+          <Button onClick={handleSubmit}>Submit</Button>
+        </>
+      )}
     </>
   );
 };

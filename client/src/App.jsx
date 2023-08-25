@@ -17,6 +17,8 @@ import Order from "./pages/shop/Order";
 import SignIn from "./pages/shop/SignIn";
 import Orders from "./pages/user/Orders";
 import Payments from "./pages/user/Payments";
+import AdminRoutes from "./auth/AdminRoutes";
+import PaymentDetails from "./pages/admin/PaymentDetails";
 
 function App() {
   return (
@@ -79,15 +81,6 @@ function App() {
                   }
                 />
                 <Route
-                  path="/admin/dashboard"
-                  element={
-                    <>
-                      <Navbar />
-                      <AdminDashboard />
-                    </>
-                  }
-                />
-                <Route
                   path="/payments/:id"
                   element={
                     <>
@@ -95,6 +88,22 @@ function App() {
                       <Payments />
                     </>
                   }
+                />
+              </Route>
+              {/* admin only */}
+              <Route element={<AdminRoutes/>}>
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    <>
+                      <AdminDashboard />
+                    </>
+                  }
+                />
+                <Route path="/admin/details/:id"
+                  element={<>
+                    <PaymentDetails/>
+                  </>}
                 />
               </Route>
             </Routes>

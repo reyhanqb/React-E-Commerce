@@ -1,7 +1,7 @@
 import { URL } from "../../api/url";
 import React, { useContext, useEffect, useState } from "react";
 import "./styles.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ShopContext } from "../../context/shop-context";
 
 
@@ -11,6 +11,7 @@ const AdminDashboard = () => {
   const [currentOrders, setCurrentOrders] = useState([]);
 
   const nav = useNavigate();
+  
 
   useEffect(() => {
     fetchCurrentOrders();
@@ -122,11 +123,7 @@ const getPaymentStatus = async (token) => {
                           </>
                         )}
                       </td>
-                      <td className="tg-0lax">{
-                        <button onClick={() => getPaymentStatus(p.payment_token)}>
-                          Check status
-                        </button>
-                      }</td>
+                      <td className="tg-0lax">{<Link to={`/admin/details/${p.payment_token}`} state={{currentOrders: currentOrders}}>Check status</Link>}</td>
                     </tr>
                   </>
                 ))}

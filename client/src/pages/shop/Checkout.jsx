@@ -3,9 +3,8 @@ import { ShopContext } from "../../context/shop-context";
 import { useContext } from "react";
 import CartItems from "../cart/CartItems";
 import { products } from "../../Products";
-import axios from "axios";
 import { Grid, TextField, Button, Typography } from "@mui/material";
-import * as uuid from "uuid";
+import { URL } from "../../api/url";
 
 const Checkout = () => {
   const { cartItems, totalCartAmount, checkTimestamp } =
@@ -14,8 +13,6 @@ const Checkout = () => {
   const total = totalCartAmount();
 
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
-
-  const [token, setToken] = useState("");
 
   let today = checkTimestamp();
 
@@ -40,8 +37,7 @@ const Checkout = () => {
   let user_email = localStorage.getItem("email");
   let user = localStorage.getItem("user");
 
-
-  let defaultOrders = {
+  const [orders, setCustomerOrders] = useState({
     nama: user,
     email: user_email,
     details: "",
@@ -51,10 +47,7 @@ const Checkout = () => {
     zipcode: "",
     total: total,
     createdAt: today,
-  };
-
-  const [orders, setCustomerOrders] = useState(defaultOrders);
-  
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,41 +58,40 @@ const Checkout = () => {
   };
 
   const handleSubmit = async () => {
-    if (total > 0) {
-      let v = validationCheck();
-      console.log(v);
-      if (v === true) {
-        console.log("x");
-        console.log(orders)
-        return;
-      }
-      setToken(uuid.v4());
-      try {
-        const cartOrder = Object.entries(cartItems)
-          .filter(([id, quantity]) => quantity > 0)
-          .map(([id, quantity]) => `${id}(${quantity})`)
-          .join(", ");
-        const res = await axios.post("http://localhost:3001/create-orders", {
-          nama: user,
-          address: orders.address,
-          total: total,
-          details: cartOrder,
-          city: orders.city,
-          province: orders.province,
-          zipcode: orders.zipcode,
-          email: user_email,
-          createdAt: orders.createdAt,
-          token: token,
-        });
-        console.log(res);
-        setIsOrderPlaced(true);
-        localStorage.setItem("token", token);
-        nav("/paywall")
-      } catch (error) {
-        throw error;
-      }
-    } else {
-      console.log("Your cart is empty");
+    if (total < 1) {
+      console.log("your cart is empty.");
+      return;
+    }
+
+    let v = validationCheck();
+    console.log(v);
+    if (v === true) {
+      console.log("x");
+      console.log(orders);
+      return;
+    }
+    try {
+      const cartOrder = Object.entries(cartItems)
+        .filter(([id, quantity]) => quantity > 0)
+        .map(([id, quantity]) => `${id}(${quantity})`)
+        .join(", ");
+      const res = await URL.post("/create-orders", {
+        nama: user,
+        address: orders.address,
+        total: total,
+        details: cartOrder,
+        city: orders.city,
+        province: orders.province,
+        zipcode: orders.zipcode,
+        email: user_email,
+        createdAt: orders.createdAt,
+      });
+      console.log(res);
+      setIsOrderPlaced(true);
+      localStorage.setItem("token", token);
+      nav("/paywall");
+    } catch (error) {
+      throw error;
     }
   };
 

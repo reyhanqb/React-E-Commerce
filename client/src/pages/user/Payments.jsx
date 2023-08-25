@@ -4,8 +4,6 @@ import { URL } from '../../api/url'
 import Paywall from "../shop/Paywall"
 
 const Payments = () => {
-    const [details, setDetails] = useState([])
-
     const { id } = useParams()
 
     console.log(id)
@@ -18,7 +16,6 @@ const Payments = () => {
 
   return (
     <>
-    <p>hello</p>
     <Paywall/>
     </>
   )

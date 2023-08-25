@@ -132,4 +132,4 @@ dist
 ./checklist.txt
 ./src
 
-.payments/
+./server/payments/

@@ -3,6 +3,7 @@ const db = require("./database");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const multer = require("multer");
+const uuid = require("uuid")
 
 const router = express.Router();
 
@@ -98,9 +99,9 @@ router.post("/create-orders", async (req, res) => {
     city,
     province,
     zipcode,
-    createdAt,
-    token,
+    createdAt
   } = req.body;
+  let token = uuid.v4();
   let query = `INSERT INTO orders (details, email, address, total, name, city, province, zipcode, date_created, payment_token) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   try {
     db.query(

@@ -8,23 +8,31 @@ const router = express.Router();
 
 const day = dayjs();
 
+router.get("/admin/sessions", async (req, res) => {
+  const adminCookie = req.cookies["admin-session"];
+
+ if (adminCookie) {
+    res.send({
+      status: 200,
+      message: "Authenticated as an admin",
+    });
+  } else {
+    res.json({
+      message: "You are unauthenticated",
+      status: 400,
+    });
+  }
+});
+
 router.get("/sessions",  async (req, res) => {
   const cookie =  req.cookies["auth"]
-  const adminCookie = req.cookies["admin-session"]
-
-  // console.log(cookie)
 
   if(cookie){
     res.send({
       status: 200,
       message: "Welcome back!"
     })
-  } else if(adminCookie){
-    res.send({
-      status: 201,
-      message: "Authenticated as an admin"
-    })
-  } 
+  }
   else {
     res.json({
       message: "You are unauthenticated",

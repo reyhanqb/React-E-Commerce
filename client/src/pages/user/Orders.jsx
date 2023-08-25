@@ -66,12 +66,17 @@ const Orders = () => {
               <h5>Status</h5>
               {o.date_finished === null ? (
                 <>
-                  <Link to={`/payments/${o.payment_token}`} state={{orders: orders}}>
+                  <Link
+                    to={`/payments/${o.payment_token}`}
+                    state={{ orders: orders }}
+                  >
                     Pending
                   </Link>
                 </>
               ) : (
-                <>Completed</>
+                <>
+                  <p>Completed</p>
+                </>
               )}
             </div>
           </>
